@@ -4,6 +4,7 @@ float vbx = 0;
 float vby = 0;
 int saveScore = 0;
 int size = 0;
+boolean paused = false;
 boolean gameover = false;
 void setup() {
   size(600, 500);
@@ -12,6 +13,11 @@ void setup() {
 void draw() {
   if (!gameover) {
     background(0);
+    rect(0,400,100,100);
+    fill(0);
+    rect(25,425,10,50);
+    rect(65,425,10,50);
+    fill(255);
   } else {
     size = round(random(10, 100));
     bx = random(0, 600);
@@ -40,8 +46,15 @@ void mouseReleased() {
     by = random(50, 450);
     vbx = random(-1, 1) * size;
     vby = random(-1, 1) * size;
+  }else if(mouseX<100&&mouseY>400) {
+    paused = !paused;
   }else if (!gameover){
     saveScore = size;
     gameover = true;
+  }else{
+    background(0);
+    gameover = false;
+    saveScore = 0;
+    size = 0;
   }
 }
