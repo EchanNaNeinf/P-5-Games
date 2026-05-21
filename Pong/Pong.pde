@@ -1,4 +1,5 @@
 char gameState = 'm';
+char winner = 'n';
 float mom1 = 0;
 float pos1 = 200;
 float mom2 = 0;
@@ -22,6 +23,7 @@ void setup() {
 void draw() {
   fill(0);
   if (gameState == 'm') {
+    winner = 'n';
     background(255);
     textSize(50);
     text("Welcome to Pong.", 100, 50);
@@ -48,33 +50,43 @@ void draw() {
     stroke(0);
     text(score1, 200, 40);
     text(score2, 400, 40);
-    pos1 = pos1 + mom1;
-    pos2 = pos2 + mom2;
-    ballX = ballX + vx;
-    ballY = ballY + vy;
     fill(100, 200, 100);
     circle(100, pos1, 100);
     fill(50, 50, 50);
     circle(500, pos2, 100);
     fill(255);
     circle(ballX, ballY, 50);
-    ballX = ballX + vx;
-    ballY = ballY + vy;
-    //movement controls
-    player1();
-    ballCollision();
-    //AI movement
-    if (pos2>ballY+75) {
-      mom2 = mom2-1.5;
-    } else if (pos2<ballY-75) {
-      mom2 = mom2+1.5;
-    }
-    if (mom2 != 0) {
-      if (mom2 > 0) {
-        mom2--;
-      } else {
-        mom2++;
+    if (!p) {
+      pos1 = pos1 + mom1;
+      pos2 = pos2 + mom2;
+      ballX = ballX + vx;
+      ballY = ballY + vy;
+      ballX = ballX + vx;
+      ballY = ballY + vy;
+      //movement controls
+      player1();
+      ballCollision();
+      //AI movement
+      if (pos2>ballY+75) {
+        mom2 = mom2-1.5;
+      } else if (pos2<ballY-75) {
+        mom2 = mom2+1.5;
       }
+      if (mom2 != 0) {
+        if (mom2 > 0) {
+          mom2--;
+        } else {
+          mom2++;
+        }
+      }
+    }
+    if (score1 == 3) {
+      gameState = 'o';
+      winner = 'H';
+    }
+    if (score2 == 3) {
+      gameState = 'o';
+      winner = 'A';
     }
   } else if (gameState == '2') {
     background(100);
@@ -84,44 +96,68 @@ void draw() {
     stroke(0);
     text(score1, 200, 40);
     text(score2, 400, 40);
-    pos1 = pos1 + mom1;
-    pos2 = pos2 + mom2;
-    ballX = ballX + vx;
-    ballY = ballY + vy;
+    if (!p) {
+      pos1 = pos1 + mom1;
+      pos2 = pos2 + mom2;
+      ballX = ballX + vx;
+      ballY = ballY + vy;
+      player1();
+      ballCollision();
+      if (i) {
+        mom2 = mom2-2;
+      } else if (k) {
+        mom2 = mom2+2;
+      }
+      //movement controls
+
+      //friction
+      if (mom2 != 0) {
+        if (mom2 > 0) {
+          mom2--;
+        } else {
+          mom2++;
+        }
+      }
+      //bounce off edge
+      if (pos2 < 50 || pos2 > 350) {
+        mom2 = -mom2;
+        if (pos2 < 50) {
+          pos2 = 50;
+        } else {
+          pos2 = 350;
+        }
+      }
+    }
     fill(100, 200, 100);
     circle(100, pos1, 100);
     fill(200, 100, 100);
     circle(500, pos2, 100);
     fill(255);
     circle(ballX, ballY, 50);
-    //movement controls
-    player1();
-    ballCollision();
-    if (i) {
-      mom2 = mom2-2;
-    } else if (k) {
-      mom2 = mom2+2;
+    if (score1 == 3) {
+      gameState = 'o';
+      winner = '1';
     }
-    //friction
-    if (mom2 != 0) {
-      if (mom2 > 0) {
-        mom2--;
-      } else {
-        mom2++;
-      }
-    }
-    //bounce off edge
-    if (pos2 < 50 || pos2 > 350) {
-      mom2 = -mom2;
-      if (pos2 < 50) {
-        pos2 = 50;
-      } else {
-        pos2 = 350;
-      }
+    if (score2 == 3) {
+      gameState = 'o';
+      winner = '2';
     }
   } else if (gameState == 'o') {
     background(0);
+    fill(255);
+    if (winner == 'H') {
+      text("Human Wins!", 100, 100);
+    } else if (winner == 'A') {
+      text("AI Wins...", 100, 100);
+    } else if (winner == '1') {
+      text("Player 1 Wins!", 100, 100);
+    } else if (winner == '2') {
+      text("Player 2 Wins!", 100, 100);
+    }
+    text("Click to return to Home.", 100, 200);
   }
+  if(p&&(gameState == '1' || gameState == '2')){
+  text("Paused.", 200, 300);}
 }
 void player1() {
   if (w) {
@@ -200,6 +236,8 @@ void mouseReleased() {
     gameState = '1';
   } else if (mouseX > 300 && mouseX < 500 && mouseY > 200 && mouseY < 300 && gameState == 'm') {
     gameState = '2';
+  } else if (gameState == 'o') {
+    gameState = 'm';
   }
 }
 void keyPressed() {
@@ -215,9 +253,6 @@ void keyPressed() {
   if (key == 'k') {
     k = true;
   }
-  if (key == 'p'){
-    p = true;
-  }
 }
 void keyReleased() {
   if (key == 'w') {
@@ -232,7 +267,7 @@ void keyReleased() {
   if (key == 'k') {
     k = false;
   }
-  if (key == 'p'){
-    p = false;
+  if (key == 'p') {
+    p = !p;
   }
 }
