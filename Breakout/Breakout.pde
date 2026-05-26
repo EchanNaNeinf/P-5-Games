@@ -4,7 +4,7 @@ float pos1 = 200;
 float ballX = 200;
 float ballY = 300;
 float vx = 0;
-float vy = 1;
+float vy = 2;
 int score1 = 0;
 int timer = 120;
 boolean a = false;
@@ -28,9 +28,9 @@ void draw() {
   if (gameState == 'm') {
     background(255);
     textSize(50);
-    text("Welcome to", 10, 50);
-    text("Breakout.", 100, 100);
-    text("Click to continue.", 10, 150);
+    text("Welcome to", 50, 150);
+    text("Breakout.", 100, 200);
+    text("Click to continue.", 10, 250);
   } else if (gameState == '1') {
     background(100);
     fill(255);
@@ -45,7 +45,7 @@ void draw() {
     for (int i = 0; i < 5; i++) {
       for (int j = 0; j < 9; j++) {
         if (!g[i][j]) {
-          circle(j*45+25, i*45+50, 30);
+          circle(j*45+25, i*45+75, 30);
         }
       }
     }
@@ -94,12 +94,12 @@ void player1() {
 void ballCollision() {
   if (dist(ballX, ballY, pos1, 600)<75) {
     vx = (ballX-pos1)/20+mom1;
-    vy = (ballY-600)/10-vx/4;
+    vy = (ballY-600)/20-vx/4;
   }
   for (int i = 0; i < 5; i++) {
     for (int j = 0; j < 9; j++) {
-      if (!g[i][j] && dist(ballX, ballY, j*45+25, i*45+50)<40) {
-        vx = (ballX-j*45-25)/20;
+      if (!g[i][j] && dist(ballX, ballY, j*45+25, i*45+75)<40) {
+        vx = (ballX-j*45-25)/10;
         vy = (ballY-i*45-50)/10-vx/4;
         g[i][j] = true;
       }
@@ -122,10 +122,11 @@ void ballCollision() {
     for (int j = 0; j > 5; j++) {
       if (g[i][j] == false) {
         g[i][j] = true;
+        score1++;
       }
     }
   }
-  if (ballY > 600) {
+  if (ballY > 800) {
     vy = 0;
     vx = 0;
     ballX = 200;
