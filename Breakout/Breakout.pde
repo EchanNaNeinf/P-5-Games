@@ -7,7 +7,8 @@ float vx = 0;
 float vy = 2;
 int score1 = 0;
 int score2 = 0;
-int timer = 120;
+int timer = 0;
+int temppos = 0;
 boolean a = false;
 boolean d = false;
 boolean p = false;
@@ -17,8 +18,17 @@ boolean[][] g = {
   {false, false, false, false, false, false, false, false, false},
   {false, false, false, false, false, false, false, false, false},
   {false, false, false, false, false, false, false, false, false}};
+PImage[] f = new PImage[8];
 void setup() {
   size(400, 600);
+  f[1] = loadImage("sprite_1.png");
+  f[2] = loadImage("sprite_2.png");
+  f[3] = loadImage("sprite_3.png");
+  f[4] = loadImage("sprite_4.png");
+  f[5] = loadImage("sprite_5.png");
+  f[6] = loadImage("sprite_6.png");
+  f[7] = loadImage("sprite_7.png");
+  f[0] = loadImage("sprite_0.png");
 }
 
 void draw() {
@@ -26,9 +36,18 @@ void draw() {
   if (gameState == 'm') {
     background(255);
     textSize(50);
-    text("Welcome to", 50, 150);
+    text("Welcome to", 60, 150);
     text("Breakout.", 100, 200);
-    text("Click to continue.", 10, 250);
+    text("Click to continue.", 20, 450);
+    if (timer == 400) {
+    } else if (timer < 200) {
+      timer++;
+    } else {
+      timer++;
+      temppos++;
+    }
+    rect(0,0-5*temppos,500,800);
+    image(f[round(timer/5 % 8)],135,250-temppos*5);
   } else if (gameState == '1') {
     background(100);
     fill(255);
@@ -56,6 +75,7 @@ void draw() {
       player();
       ballCollision();
     }
+
     text("Lives left: "+(3-score2), 100, 550);
   } else if (gameState == 'o') {
     background(0);
@@ -132,9 +152,16 @@ void ballCollision() {
 }
 void mouseReleased() {
   if (gameState == 'm') {
-    gameState = '1';
+    if(timer == 400){
+          gameState = '1';
+    }else{
+      timer = 400;
+      temppos = 600;
+    }
   } else if (gameState == 'o') {
     gameState = 'm';
+    timer = 0;
+    temppos = 0;
   }
 }
 void keyPressed() {
