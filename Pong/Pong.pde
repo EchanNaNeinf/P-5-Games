@@ -83,10 +83,26 @@ void draw() {
     if (score1 == 3) {
       gameState = 'o';
       winner = 'H';
+      score1 = 0;
+      score2 = 0;
+      mom1 = 0;
+      pos1 = 200;
+      mom2 = 0;
+      pos2 = 200;
+      ballX = 300;
+      ballY = 200;
     }
     if (score2 == 3) {
       gameState = 'o';
       winner = 'A';
+      score1 = 0;
+      score2 = 0;
+      mom1 = 0;
+      pos1 = 200;
+      mom2 = 0;
+      pos2 = 200;
+      ballX = 300;
+      ballY = 200;
     }
   } else if (gameState == '2') {
     background(100);
@@ -137,10 +153,14 @@ void draw() {
     if (score1 == 3) {
       gameState = 'o';
       winner = '1';
+      score1 = 0;
+      score2 = 0;
     }
     if (score2 == 3) {
       gameState = 'o';
       winner = '2';
+      score1 = 0;
+      score2 = 0;
     }
   } else if (gameState == 'o') {
     background(0);
@@ -156,8 +176,9 @@ void draw() {
     }
     text("Click to return to Home.", 100, 200);
   }
-  if(p&&(gameState == '1' || gameState == '2')){
-  text("Paused.", 200, 300);}
+  if (p&&(gameState == '1' || gameState == '2')) {
+    text("Paused.", 200, 300);
+  }
 }
 void player1() {
   if (w) {
