@@ -1,7 +1,7 @@
 float test;
 float modX;
 float modY;
-int t;
+int t,e = 1;
 boolean cooldown;
 boolean a;
 boolean d;
@@ -9,10 +9,8 @@ boolean w;
 boolean s;
 int cd = 0;
 int charge = 0;
-float px;
-float py;
-float vx;
-float vy;
+float px,py,vx,vy;
+float ex,ey;
 int sl = 5;
 void setup() {
   size(600, 600);
@@ -31,6 +29,16 @@ void draw() {
     t = -1;
   } else {
     t = 1;
+  }
+  if (px > ex) {
+    ex = ex+0.3;
+  } else if (px < ex) {
+    ex = ex-0.3;
+  }
+  if (py > ey) {
+    ey = ey+0.3;
+  } else if (py < ey) {
+    ey = ey-0.3;
   }
   playerActions();
   px = px+vx;
@@ -57,6 +65,7 @@ void draw() {
   translate(-px, -py);
   stroke(0);
   fill(0);
+  circle(ex,ey,100);
   rect(-1000, -1000, 2000, 500);
   rect(-1000, -1000, 500, 2000);
   rect(500, -500, 500, 2000);
@@ -65,7 +74,7 @@ void draw() {
   //-----------------DARK COVER ----------------
   strokeWeight(5);
   stroke(0);
-  fill(0);
+  fill(0,210);
   beginShape();
   vertex(cos(test)*10*t, sin(test)*10*t);
   vertex(cos(test-0.5)*500*t, sin(test-0.5)*500*t);
