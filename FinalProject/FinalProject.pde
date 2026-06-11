@@ -1,16 +1,17 @@
 float test;
 float modX;
 float modY;
-int t,e = 1;
+int t,t1, e = 1;
 boolean cooldown;
 boolean a;
 boolean d;
 boolean w;
 boolean s;
 int cd = 0;
-int charge = 0;
-float px,py,vx,vy;
-float ex,ey;
+int charge = 100;
+int recharge = 0;
+float px, py, vx, vy;
+float ex, ey, test1;
 int sl = 5;
 void setup() {
   size(600, 600);
@@ -30,15 +31,13 @@ void draw() {
   } else {
     t = 1;
   }
-  if (px > ex) {
-    ex = ex+0.3;
-  } else if (px < ex) {
-    ex = ex-0.3;
+  if (recharge != 0) {
+    recharge--;
+  } else if (charge < 100) {
+    charge++;
   }
-  if (py > ey) {
-    ey = ey+0.3;
-  } else if (py < ey) {
-    ey = ey-0.3;
+  if (cd == 0) {
+    enemyActions();
   }
   playerActions();
   px = px+vx;
@@ -65,7 +64,7 @@ void draw() {
   translate(-px, -py);
   stroke(0);
   fill(0);
-  circle(ex,ey,100);
+  circle(ex, ey, 100);
   rect(-1000, -1000, 2000, 500);
   rect(-1000, -1000, 500, 2000);
   rect(500, -500, 500, 2000);
@@ -73,8 +72,8 @@ void draw() {
   popMatrix();
   //-----------------DARK COVER ----------------
   strokeWeight(5);
-  stroke(0);
-  fill(0,210);
+  noStroke();
+  fill(0, 230);
   beginShape();
   vertex(cos(test)*10*t, sin(test)*10*t);
   vertex(cos(test-0.5)*500*t, sin(test-0.5)*500*t);
@@ -82,12 +81,44 @@ void draw() {
   vertex(cos(test+2)*1000*t, sin(test+2)*1000*t);
   vertex(cos(test+0.5)*500*t, sin(test+0.5)*500*t);
   endShape(CLOSE);
+  fill(0, 130);
+  if (cd == 0) {
+    beginShape();
+    vertex(cos(test)*10*t, sin(test)*10*t);
+    vertex(cos(test-0.5)*500*t, sin(test-0.5)*500*t);
+    vertex(cos(test+0.5)*500*t, sin(test+0.5)*500*t);
+    endShape(CLOSE);
+  }
   //-------------- UI LAYER -----------------
   fill(0, 0, 0);
-  stroke(100,0,0);
+  stroke(100, 0, 0);
   circle(modX, modY, 1);
   stroke(0);
+  rect(200, 125, 75, 100);
+  fill(120, 100, 85);
   circle(0, 0, 50);
+  fill(80, 80, 80);
+  beginShape();
+  vertex(cos(test-0.5)*20*t, sin(test-0.5)*20*t);
+  vertex(cos(test+0.5)*20*t, sin(test+0.5)*20*t);
+  vertex(cos(test+0.5)*50*t, sin(test+0.5)*50*t);
+  vertex(cos(test-0.5)*50*t, sin(test-0.5)*50*t);
+  endShape(CLOSE);
+  fill(255);
+  rect(200, 225, 75, -charge);
+  rect(225, 115, 25, 10);
+}
+void enemyActions() {
+  if (px > ex) {
+    ex = ex+0.3;
+  } else if (px < ex) {
+    ex = ex-0.3;
+  }
+  if (py > ey) {
+    ey = ey+0.3;
+  } else if (py < ey) {
+    ey = ey-0.3;
+  }
 }
 void playerActions() {
   if (a && vx > -sl) {
@@ -140,6 +171,10 @@ void playerActions() {
 void mouseClicked() {
   if (cd==0) {
     cd = 10;
+    vx = 0;
+    vy = 0;
+    charge = charge-20;
+    recharge = 100;
   }
 }
 void keyPressed() {
