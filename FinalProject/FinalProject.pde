@@ -1,12 +1,13 @@
 float test;
 float modX;
 float modY;
-int t,t1, e = 1;
+int t, t1, e = 1;
 boolean cooldown;
 boolean a;
 boolean d;
 boolean w;
 boolean s;
+int activated = 1;
 int cd = 0;
 int charge = 100;
 int recharge = 0;
@@ -16,7 +17,7 @@ int sl = 5;
 void setup() {
   size(600, 600);
   test = 0;
-  px = 500;
+  px = 50;
   py = 0;
   vx = 0;
   vy = 0;
@@ -36,7 +37,7 @@ void draw() {
   } else if (charge < 100) {
     charge++;
   }
-  if (cd == 0) {
+  if (cd == 0 && activated == 1) {
     enemyActions();
   }
   playerActions();
@@ -44,13 +45,15 @@ void draw() {
   py = py+vy;
   translate(300, 300);
   //image(d, -300, -300); //LAG HEAVY
-  if (modX != 0) {
+  if (modX != 0) {//rise over run stuff
     test = atan(modY/modX);
-  } else {
-    t=-t;
+  }
+  if (ex != 0) {//rise over run stuff
+    test1 = atan(ey/ex);
   }
   //--------------Object Layer----------
   background(100);
+  //translate(-modX/50,(-modY/50));
   if (cd!=0) {
     fill(255, 255, 255, map(cd, 0, 8, 0, 255));
     beginShape();
@@ -169,7 +172,18 @@ void playerActions() {
   }
 }
 void mouseClicked() {
-  if (cd==0) {
+  for (int i = 0; i < 10; i++) {//detection
+    if (dist(-ex, -ey, 10*i, test1*i*10) < 100) {
+      activated = 2;
+    }
+    print(dist(-ex, -ey, 10*i, test1*i*10) + "   ");
+  }
+  if (activated == 1) {
+    activated = 0;
+  } else if (activated == 2) {
+    activated = 1;
+  }
+  if (cd==0 && charge >= 20 ) {
     cd = 10;
     vx = 0;
     vy = 0;
