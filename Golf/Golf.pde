@@ -39,11 +39,14 @@ void draw() {
     } else {
       airborne = true;
     }
+    if (x > fx + 100 || x < 50) {
+      vx = -vx;
+    }
     if (airborne) {//if in the air
       vy = vy + 1;
     }
     if (!airborne && vx != 0) {
-      vx = sqrt(vx*vx*0.8);
+      vx = vx*0.8;
       if (vx < 0.5 && vx > -0.5) {
         vx = 0;
       }
@@ -71,11 +74,13 @@ void draw() {
     circle(-4, -4, 5);
     popMatrix();
     fill(100);
-    rect(fx-5, 400, 10, 115);
+    rect(fx-5, 400, 10, 115);//flag
     fill(200, 50, 50);
     triangle(fx-5, 400, fx-60, 410, fx-5, 420);
     fill(0);
     ellipse(fx, 510, 30, 20);
+    rect(fx+100, 100, 100, 500);
+    rect(0, 100, 50, 500);
     if (x > fx-30 &&x < fx + 30 && !airborne) {// inHole
       mode = 'o';
       if (score < lowScore) {
@@ -90,11 +95,11 @@ void draw() {
       rect(100, 200, 20, 100);
       fill(50, 200, 50);
       rect(100, 300, 20, 100);
-      triangle(140, map(power,50,0,95,395), 120, map(power,50,0,100,400), 140, map(power,50,0,105,405));
+      triangle(140, map(power, 50, 0, 95, 395), 120, map(power, 50, 0, 100, 400), 140, map(power, 50, 0, 105, 405));
       power = power+pd;
-      if(power <= 1){
+      if (power <= 1) {
         pd = 1;
-      }else if(power >= 50){
+      } else if (power >= 50) {
         pd = -1;
       }
     }
